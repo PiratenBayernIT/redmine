@@ -37,6 +37,8 @@
                   :remote => true,
                   :method => 'get' %>
       </span>
+      <%# additional hook to extend the watchers section %>
+      <%= call_hook(:view_issues_watchers_bottom, { :issue => @issue }) %>
       </p>
     <% end %>
   </div>
