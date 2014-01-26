@@ -29,10 +29,20 @@ class Mailer < ActionMailer::Base
 
   # Builds a mail for notifying to_users and cc_users about a new issue
   def issue_add(issue, to_users, cc_users)
+    # XXX: dirty hack for mailinglist notifications, please improve this!
+    no_mailinglist = true
+    if issue.status.name == "Bestätigt"
+      no_mailinglist = nil
+    end
+    # end hack
     redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Id' => issue.id,
                     'Issue-Author' => issue.author.login
     redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+    # XXX: dirty hack for mailinglist notifications, please improve this!
+    redmine_headers 'No-Mailinglist' => no_mailinglist
+    Rails.logger.info("### no_mailinglist #{no_mailinglist}")
+    # end hack
     message_id issue
     references issue
     @author = issue.author
@@ -57,10 +67,46 @@ class Mailer < ActionMailer::Base
   # Builds a mail for notifying to_users and cc_users about an issue update
   def issue_edit(journal, to_users, cc_users)
     issue = journal.journalized
+    # XXX: dirty hack for mailinglist notifications, please improve this!
+    no_mailinglist = true
+    # custom field ids:
+    # 3 == Ende
+    # 8 == Adresse
+    # 10 == Veranstaltungsort
+    # 2 == Startzeit
+    if issue.status.name == "Bestätigt"
+        if (journal.new_value_for('status_id') \
+            or journal.new_value_for('description') \
+            or journal.new_value_for('subject') \
+            or journal.new_value_for(3) \
+            or journal.new_value_for(8) \
+            or journal.new_value_for(10) \
+            or journal.new_value_for(2) \
+            or journal.new_value_for('Veranstaltungsort') \
+            or journal.new_value_for('Ende') \
+            or journal.new_value_for('Adresse') \
+            or journal.new_value_for('Veranstaltungsort') \
+            or journal.new_value_for('Startzeit') \
+            or journal.new_value_for('start_date') \
+            or journal.new_value_for('due_date'))
+
+          no_mailinglist = nil
+        end
+    elsif issue.status.name == "Abgesagt"
+        if journal.new_value_for('status_id') 
+          no_mailinglist = nil
+        end
+    end
+    # end hack
     redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Id' => issue.id,
                     'Issue-Author' => issue.author.login
     redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+    # XXX: dirty hack for mailinglist notifications, please improve this!
+    redmine_headers 'No-Mailinglist' => no_mailinglist
+    redmine_headers 'Issue-Status' => issue.status.name
+    Rails.logger.info("### no mailinglist header? '#{no_mailinglist}' #{issue.status.name}")
+    # end hack
     message_id journal
     references issue
     @author = journal.user
