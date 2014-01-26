@@ -23,6 +23,7 @@ class Journal < ActiveRecord::Base
 
   belongs_to :user
   has_many :details, :class_name => "JournalDetail", :dependent => :delete_all
+  has_many :mail_recipients, :class_name => "JournalMailAddress", :dependent => :delete_all
   attr_accessor :indice
 
   acts_as_event :title => Proc.new {|o| status = ((s = o.new_status) ? " (#{s})" : nil); "#{o.issue.tracker} ##{o.issue.id}#{status}: #{o.issue.subject}" },

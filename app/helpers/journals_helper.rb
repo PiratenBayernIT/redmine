@@ -32,6 +32,8 @@ module JournalsHelper
                                              { :controller => 'journals', :action => 'edit', :id => journal, :format => 'js' },
                                                 :title => l(:button_edit)) if editable
     end
+    # hook for redmine_pirate_helpdesk
+    call_hook(:helper_journals_links, {:links => links, :journal => journal, :issue => issue, :project => issue.project})
     content << content_tag('div', links.join(' ').html_safe, :class => 'contextual') unless links.empty?
     content << textilizable(journal, :notes)
     css_classes = "wiki"
