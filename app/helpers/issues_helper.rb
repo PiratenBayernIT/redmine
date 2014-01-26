@@ -240,13 +240,19 @@ module IssuesHelper
 
   def email_issue_attributes(issue, user)
     items = []
-    %w(author status priority assigned_to category fixed_version).each do |attribute|
+    %w(start_date due_date author status priority assigned_to category fixed_version).each do |attribute|
       unless issue.disabled_core_fields.include?(attribute+"_id")
-        items << "#{l("field_#{attribute}")}: #{issue.send attribute}"
+        value = issue.send attribute
+        unless value.blank?
+          formatted = "#{l("field_#{attribute}")}: #{value}"
+          items << formatted
+        end
       end
     end
     issue.visible_custom_field_values(user).each do |value|
-      items << "#{value.custom_field.name}: #{show_value(value, false)}"
+      unless value.value.blank?
+        items << "#{value.custom_field.name}: #{show_value(value, false)}"
+      end
     end
     items
   end
