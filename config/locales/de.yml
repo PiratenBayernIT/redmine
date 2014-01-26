@@ -302,7 +302,7 @@ de:
   field_description: Beschreibung
   field_done_ratio: "% erledigt"
   field_downloads: Downloads
-  field_due_date: Abgabedatum
+  field_due_date: Enddatum
   field_editable: Bearbeitbar
   field_effective_date: Datum
   field_estimated_hours: Geschätzter Aufwand
@@ -310,7 +310,7 @@ de:
   field_filename: Datei
   field_filesize: Größe
   field_firstname: Vorname
-  field_fixed_version: Zielversion
+  field_fixed_version: Meilenstein
   field_generate_password: Passwort generieren
   field_group_by: Gruppiere Ergebnisse nach
   field_hide_mail: E-Mail-Adresse nicht anzeigen
@@ -430,7 +430,7 @@ de:
   label_attribute: Attribut
   label_attribute_of_assigned_to: "%{name} des Bearbeiters"
   label_attribute_of_author: "%{name} des Autors"
-  label_attribute_of_fixed_version: "%{name} der Zielversion"
+  label_attribute_of_fixed_version: "%{name} des Meilensteins"
   label_attribute_of_issue: "%{name} des Tickets"
   label_attribute_of_project: "%{name} des Projekts"
   label_attribute_of_user: "%{name} des Benutzers"
